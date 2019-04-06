@@ -1,0 +1,7 @@
+.vscode/*
+
+/Properties
+/bin
+/obj
+/appsettings.*
+/omnisharp.json
