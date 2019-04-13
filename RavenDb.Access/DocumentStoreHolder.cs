@@ -5,11 +5,11 @@ namespace TodoApi.RavenDb.Access
 {
     public class DocumentStoreHolder : IDocumentStoreHolder
     {
-        private static RavenDbSettings settings;
+        public IDocumentStore Store { get; }
 
         public DocumentStoreHolder(IOptions<RavenDbSettings> ravenSettings)
         {
-            settings = ravenSettings.Value;
+            var settings = ravenSettings.Value;
 
             Store = new DocumentStore
             {
@@ -18,6 +18,5 @@ namespace TodoApi.RavenDb.Access
             }.Initialize();
         }
 
-        public IDocumentStore Store { get; }
     }
 }

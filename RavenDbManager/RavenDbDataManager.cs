@@ -5,7 +5,7 @@ using TodoApi.RavenDb.Access;
 
 namespace TodoApi.RavenDbManager
 {
-    public class RavenDbDataManager
+    public class RavenDbDataManager: IRavenDbDataManager
     {
         private readonly IDocumentStore store;
 
@@ -15,17 +15,27 @@ namespace TodoApi.RavenDbManager
         }
 
 
-        public void GetDefaultData()
+        public Customer CreateCustomer()
         {
             using (IDocumentSession session = store.OpenSession())
             {
-                session.Store(new Customer {
-                    FirstName = "John",
-                    LastName = "Doe",
-                    Phone = "111-222-333"
-                });
 
+                Customer cust = new Customer
+                {
+                    FirstName = "John",
+                    LastName = "Doo",
+                    Phone = "232-3231-23"
+                };
+
+                // session.Store(new Customer {
+                //     cust.FirstName = "John",
+                //     cust.LastName = "Doe",
+                //     cust.Phone = "111-222-333"
+                // });
+                session.Store(cust);
                 session.SaveChanges();
+
+                return cust;
             }
         }
     }

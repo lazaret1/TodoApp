@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using TodoApi.Models;
 using TodoApi.RavenDbManager;
 
 namespace TodoApi.Controllers
@@ -11,15 +12,23 @@ namespace TodoApi.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
-        public RavenDbDataManager dataManager;
+
+        public readonly IRavenDbDataManager dataManager;
+
+        public ValuesController(IRavenDbDataManager manager)
+        {
+            dataManager = manager;
+        }
+
+
         /// <summary>
         /// Get values a TodoItems.
         /// </summary>
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public ActionResult<Customer> Get()
         {
-            // dataManager.GetDefaultData();
-            return new string[] { "value1", "value2" };
+            var person = dataManager.CreateCustomer();
+            return Ok(person);
         }
 
         /// GET api/values/5
@@ -31,8 +40,10 @@ namespace TodoApi.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post()
         {
+            var person = dataManager.CreateCustomer();
+            return Ok(person);
         }
 
         // PUT api/values/5

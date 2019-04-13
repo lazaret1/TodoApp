@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
 using TodoApi.RavenDb.Access;
+using TodoApi.RavenDbManager;
 
 namespace TodoApi
 {
@@ -29,6 +30,7 @@ namespace TodoApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOptions();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddSwaggerGen(c =>
             {
@@ -39,7 +41,9 @@ namespace TodoApi
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
+            services.Configure<RavenDbSettings>(Configuration.GetSection("RavenDB"));
             services.AddSingleton<IDocumentStoreHolder, DocumentStoreHolder>();
+            services.AddScoped<IRavenDbDataManager, RavenDbDataManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -58,7 +62,6 @@ namespace TodoApi
             // app.UseHttpsRedirection();
 
             app.UseSwagger();
-
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
